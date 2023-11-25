@@ -2,7 +2,7 @@ import app from './app';
 import config from './config';
 
 import mongoose from 'mongoose';
-
+console.log(config.port)
 async function server() {
   try {
     await mongoose.connect(config.database_url as string);
