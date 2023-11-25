@@ -30,3 +30,4 @@ function server() {
     });
 }
 server().catch((err) => console.log(err));
+exports.default = server;
