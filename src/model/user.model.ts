@@ -1,11 +1,12 @@
-import  { Schema, model } from 'mongoose';
+import { Schema, model } from 'mongoose';
+import bcrypt from 'bcrypt';
+
 import {
   IAddress,
   IFullname,
   IUser,
   IUserModel,
 } from '../interface/user.interface';
-
 
 const fullnameSchema = new Schema<IFullname>({
   firstName: {
@@ -93,26 +94,26 @@ userSchema.statics.updateUser = async function (
   return this.findOneAndUpdate(filter, userData);
 };
 
-
 userSchema.statics.newid = async function (
   userId: string,
-
 ): Promise<string | undefined> {
-  const filter = {userId: parseInt(userId)}
-  
-   const ee = await this.findOne(filter)
+  const filter = { userId: parseInt(userId) };
 
-  const kk = ee?._id
- 
-   const pp = kk?.toString();
- 
-   return pp;
-   
- 
+  const ee = await this.findOne(filter);
+
+  const kk = ee?._id;
+
+  const pp = kk?.toString();
+
+  return pp;
 };
 
-
-
+userSchema.pre('save', async function (next) {
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
+  const user = this; 
+  user.password = await bcrypt.hash(user.password, 10);
+  next();
+});
 
 const user = model<IUser, IUserModel>('User', userSchema);
 export default user;
