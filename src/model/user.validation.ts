@@ -39,7 +39,7 @@ const userValidationSchema = z.object({
     required_error: 'Password is required',
     invalid_type_error: 'Password must be a string',
   }),
-  fullname: fullnameSchema,
+  fullName: fullnameSchema,
   age: z.number({
     required_error: 'Age is required',
     invalid_type_error: 'Age must be a Number',

@@ -16,4 +16,4 @@ async function server() {
 }
 server().catch((err) => console.log(err));
 
-export default server;
+

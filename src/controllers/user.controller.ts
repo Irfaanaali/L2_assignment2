@@ -17,7 +17,7 @@ const createUser = async (req: Request, res: Response) => {
     const {
       userId,
       username,
-      fullname,
+      fullName,
       age,
       email,
       isActive,
@@ -27,7 +27,7 @@ const createUser = async (req: Request, res: Response) => {
     const newUser = new user({
       userId,
       username,
-      fullname,
+      fullName,
       age,
       email,
       isActive,
@@ -57,19 +57,30 @@ const getAllUser = async (req: Request, res: Response) => {
   try {
     const result = await userService.getAllUsers();
 
-    res.status(200).json({
-      success: true,
-      message: 'User fetch successfully',
-      data: result,
-    });
+    if (result) {
+      res.status(200).json({
+        success: true,
+        message: 'User Fetched successfully',
+        data: result,
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     res.status(500).json({
       success: false,
-      message: 'User not found',
+      message: 'Internal Server Error',
       error: {
-        code: 404,
-        description: 'User not found!',
+        code: 500,
+        description: 'Internal Server Error',
       },
     });
   }
@@ -80,21 +91,31 @@ const getSingleUser = async (req: Request, res: Response) => {
     const userId = req.params.userId;
 
     const result = await user.withoutPassword(userId);
-
-    res.status(200).json({
-      success: true,
-      message: 'User Fetched successfully',
-      data: result,
-    });
+    if (result) {
+      res.status(200).json({
+        success: true,
+        message: 'User Fetched successfully',
+        data: result,
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     res.status(500).json({
       success: false,
-      message: 'User not found',
+      message: 'Internal Server Error',
       error: {
-        code: 404,
-        description: 'User not found!',
+        code: 500,
+        description: 'Internal Server Error',
       },
     });
   }
@@ -107,20 +128,31 @@ const updateUser = async (req: Request, res: Response) => {
 
     const result = await user.updateUser(userId, userData);
 
-    res.status(201).json({
-      success: true,
-      message: 'User updated successfully',
-      data: result,
-    });
+    if (result) {
+      res.status(200).json({
+        success: true,
+        message: 'User updated successfully',
+        data: result,
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     res.status(500).json({
       success: false,
-      message: 'User not found',
+      message: 'Internal Server Error',
       error: {
-        code: 404,
-        description: 'User not found!',
+        code: 500,
+        description: 'Internal Server Error',
       },
     });
   }
@@ -132,20 +164,32 @@ const deleteUser = async (req: Request, res: Response) => {
 
     // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
     const result = await user.deleteUser(userId);
-    res.status(200).json({
-      success: true,
-      message: 'User Delete successfully',
-      data: 'null',
-    });
+
+    if (result) {
+      res.status(200).json({
+        success: true,
+        message: 'User Delete successfully',
+        data: 'null',
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     res.status(500).json({
       success: false,
-      message: 'User not found',
+      message: 'Internal Server Error',
       error: {
-        code: 404,
-        description: 'User not found!',
+        code: 500,
+        description: 'Internal Server Error',
       },
     });
   }
@@ -159,6 +203,7 @@ const addOrder = async (req: Request, res: Response) => {
     const validateData = orderValidationSchema.parse(orderData);
     // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
     const result = await order.addOrderToUser(id, validateData);
+
     res.status(200).json({
       success: true,
       message: 'Order created successfully!',
@@ -185,11 +230,23 @@ const getAllOrder = async (req: Request, res: Response) => {
 
     // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
     const result = await order.getAllOrder(id);
-    res.status(200).json({
-      success: true,
-      message: 'Order fetched successfully!',
-      data: result,
-    });
+
+    if (result) {
+      res.status(200).json({
+        success: true,
+        message: 'Order fetched successfully!',
+        data: result,
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
@@ -210,11 +267,22 @@ const totalPrice = async (req: Request, res: Response) => {
 
     // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
     const result = await order.totalPrice(id);
-    res.status(200).json({
-      success: true,
-      message: 'Total price calculated successfully!',
-      data: result,
-    });
+    if (result) {
+      res.status(200).json({
+        success: true,
+        message: 'Total price calculated successfully!',
+        data: result,
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {

@@ -48,7 +48,7 @@ const userSchema = new Schema<IUser, IUserModel>({
     type: String,
     required: true,
   },
-  fullname: {
+  fullName: {
     type: fullnameSchema,
     required: true,
   },
